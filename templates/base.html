@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}VOZ - Cộng đồng{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/voz.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ux-improvements.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reactions.css' %}">
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <div class="logo">
+            <a href="/">VOZ</a>
+        </div>
+        <nav class="main-nav">
+            <a href="{% url 'forum:home' %}" {% if request.path == "/" %}class="active"{% endif %}>Forums</a>
+            <a href="{% url 'forum:new_posts' %}" {% if 'new-posts' in request.path %}class="active"{% endif %}>New posts</a>
+            <a href="{% url 'forum:trending' %}" {% if 'trending' in request.path %}class="active"{% endif %}>🔥 Trending</a>
+            <a href="{% url 'forum:featured_content' %}" {% if 'featured' in request.path %}class="active"{% endif %}>Featured</a>
+            {% if request.user.is_staff %}
+                <a href="/admin/">Admin</a>
+            {% endif %}
+        </nav>
+        
+        <!-- Search Bar -->
+        <div class="search-container" style="margin: 0 20px;">
+            <form action="{% url 'forum:search' %}" method="get" style="margin: 0;">
+                <input type="text" name="q" class="search-input" placeholder="Tìm kiếm..." value="{{ request.GET.q }}">
+                <span class="search-icon">🔍</span>
+            </form>
+        </div>
+        
+        <div class="user-actions">
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'forum:notifications' %}" style="position: relative;">
+                    🔔
+                    <span class="notification-badge" style="display: none;">0</span>
+                </a>
+                <a href="{% url 'forum:bookmarks' %}">📑</a>
+                <a href="{% url 'forum:thread_create' %}" class="btn-create-thread">+ Tạo bài</a>
+                <a href="{% url 'forum:user_profile' username=request.user.username %}" class="btn-login">{{ request.user.username }}</a>
+                <a href="{% url 'accounts:logout' %}" class="btn-register">Đăng xuất</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" class="btn-login">Log in</a>
+                <a href="{% url 'accounts:register' %}" class="btn-register">Register</a>
+            {% endif %}
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <span style="font-weight: bold; font-size: 18px;">VOZ Menu</span>
+        <button onclick="closeMobileMenu()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #333;">×</button>
+    </div>
+    
+    <div class="mobile-menu-content">
+        <a href="{% url 'forum:home' %}" class="mobile-menu-item">
+            <span>🏠</span> Forums
+        </a>
+        <a href="{% url 'forum:new_posts' %}" class="mobile-menu-item">
+            <span>📝</span> New posts
+        </a>
+        <a href="{% url 'forum:latest_activity' %}" class="mobile-menu-item">
+            <span>⚡</span> Latests
+        </a>
+        <a href="{% url 'forum:featured_content' %}" class="mobile-menu-item">
+            <span>⭐</span> Featured
+        </a>
+        
+        {% if request.user.is_authenticated %}
+            <div style="border-top: 1px solid #e0e0e0; margin: 15px 0;"></div>
+            <a href="{% url 'forum:thread_create' %}" class="mobile-menu-item">
+                <span>✏️</span> Tạo bài mới
+            </a>
+            <a href="{% url 'accounts:dashboard' %}" class="mobile-menu-item">
+                <span>👤</span> {{ request.user.username }}
+            </a>
+            <a href="{% url 'accounts:logout' %}" class="mobile-menu-item">
+                <span>🚪</span> Đăng xuất
+            </a>
+        {% else %}
+            <div style="border-top: 1px solid #e0e0e0; margin: 15px 0;"></div>
+            <a href="{% url 'accounts:login' %}" class="mobile-menu-item">
+                <span>🔐</span> Đăng nhập
+            </a>
+            <a href="{% url 'accounts:register' %}" class="mobile-menu-item">
+                <span>📝</span> Đăng ký
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    menu.classList.toggle('active');
+    overlay.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    menu.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+</script>
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#">Contact us</a>
+            <a href="#">Terms and rules</a>
+            <a href="#">Privacy policy</a>
+            <a href="#">Help</a>
+            <a href="#">RSS</a>
+        </div>
+        <div class="footer-info">
+            <p>Community platform by XenForo® © 2010-2024 XenForo Ltd.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/ux-improvements.js' %}"></script>
+<script src="{% static 'js/reactions.js' %}"></script>
+</body>
+</html>

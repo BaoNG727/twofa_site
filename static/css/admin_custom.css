@@ -1,0 +1,572 @@
+/* Django Admin Custom Theme - VOZ Style */
+
+/* Override primary colors */
+:root {
+    --primary: #1e5a8e;
+    --primary-dark: #0d47a1;
+    --secondary: #2d8f3c;
+    --accent: #1e5a8e;
+    --link-fg: #1e5a8e;
+    --link-hover-color: #0d47a1;
+    --header-bg: #1e5a8e;
+    --header-link-color: #ffffff;
+}
+
+/* Global styles */
+body {
+    background-color: #f5f5f5 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+#container {
+    background: transparent !important;
+}
+
+#content {
+    background: transparent !important;
+}
+
+/* Hide sidebar */
+#nav-sidebar {
+    display: none !important;
+}
+
+/* Expand main content to full width */
+.main {
+    margin-left: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+
+#content {
+    max-width: 1400px !important;
+    width: 100% !important;
+}
+
+#content-main {
+    max-width: 100% !important;
+}
+
+/* Toggle button */
+.toggle-nav-sidebar {
+    display: none !important;
+}
+
+/* Header */
+#header {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+#header a:link,
+#header a:visited {
+    color: #ffffff !important;
+}
+
+#header a:hover {
+    color: #e3f2fd !important;
+}
+
+/* Breadcrumbs */
+div.breadcrumbs {
+    background: #f8f8f8 !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    color: #333333 !important;
+}
+
+div.breadcrumbs a {
+    color: #1e5a8e !important;
+}
+
+div.breadcrumbs a:hover {
+    color: #0d47a1 !important;
+}
+
+/* Module headers */
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: #f8f8f8 !important;
+    color: #333333 !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Links */
+a:link,
+a:visited {
+    color: #1e5a8e !important;
+}
+
+a:hover {
+    color: #0d47a1 !important;
+}
+
+/* Buttons */
+.submit-row input[type="submit"],
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+button {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 10px 15px !important;
+    border-radius: 4px !important;
+}
+
+.submit-row input[type="submit"]:hover,
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+button:hover {
+    background: #0d47a1 !important;
+}
+
+.button.default,
+input[type="submit"].default,
+.submit-row input.default {
+    background: #2d8f3c !important;
+}
+
+.button.default:hover,
+input[type="submit"].default:hover {
+    background: #1f6b29 !important;
+}
+
+/* Delete button */
+.deletelink,
+.deletelink-box {
+    background: #dc3545 !important;
+    color: #ffffff !important;
+}
+
+.deletelink:hover,
+.deletelink-box:hover {
+    background: #c82333 !important;
+}
+
+/* Selected items */
+.selected {
+    background: #e3f2fd !important;
+}
+
+/* Object tools */
+.object-tools a {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+.object-tools a:hover {
+    background: #0d47a1 !important;
+}
+
+/* Calendar widget */
+.calendar caption,
+.calendarbox h2 {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+.calendar td.selected a {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+.calendar td a:hover {
+    background: #0d47a1 !important;
+}
+
+/* Selector */
+.selector-chosen h2 {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+.selector .selector-available h2,
+.selector .selector-chosen h2 {
+    background: #f8f8f8 !important;
+    color: #333333 !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+.selector-add,
+.selector-remove {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+.selector-add:hover,
+.selector-remove:hover {
+    background: #0d47a1 !important;
+}
+
+/* Login page */
+.login {
+    background-color: #f5f5f5 !important;
+}
+
+.login #header {
+    background: #1e5a8e !important;
+    padding: 40px 0 !important;
+}
+
+.login #header h1 {
+    margin: 0 !important;
+}
+
+.login #header h1 a {
+    color: #ffffff !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+}
+
+.login #container {
+    background: transparent !important;
+    min-height: auto !important;
+}
+
+.login #content {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    padding: 30px 40px !important;
+    margin: 50px auto !important;
+    max-width: 400px !important;
+}
+
+.login #content-main {
+    width: 100% !important;
+}
+
+.login .form-row {
+    padding: 15px 0 !important;
+    border-bottom: none !important;
+}
+
+.login .form-row label {
+    display: block !important;
+    color: #333333 !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    font-size: 14px !important;
+}
+
+.login .form-row input[type="text"],
+.login .form-row input[type="password"] {
+    width: 100% !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+    background: #ffffff !important;
+    color: #333333 !important;
+    box-sizing: border-box !important;
+}
+
+.login .form-row input[type="text"]:focus,
+.login .form-row input[type="password"]:focus {
+    border-color: #1e5a8e !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(30, 90, 142, 0.1) !important;
+}
+
+.login .submit-row {
+    padding: 20px 0 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.login input[type="submit"] {
+    width: 100% !important;
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px !important;
+    border-radius: 6px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background 0.2s !important;
+}
+
+.login input[type="submit"]:hover {
+    background: #0d47a1 !important;
+}
+
+.login .errornote {
+    background: #ffebee !important;
+    color: #c62828 !important;
+    border: 1px solid #ef9a9a !important;
+    border-radius: 6px !important;
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Password reset link */
+.login .password-reset-link {
+    display: block !important;
+    text-align: center !important;
+    margin-top: 15px !important;
+    color: #1e5a8e !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+}
+
+.login .password-reset-link:hover {
+    color: #0d47a1 !important;
+    text-decoration: underline !important;
+}
+
+/* Tables */
+#changelist-form .results {
+    background: #ffffff !important;
+}
+
+#result_list thead th {
+    background: #f8f8f8 !important;
+    color: #333333 !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+}
+
+#result_list tbody tr:hover {
+    background: #f5f5f5 !important;
+}
+
+/* Fieldset */
+.module {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+}
+
+fieldset.module {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* Dashboard */
+#content-main {
+    padding: 20px !important;
+}
+
+#content-main .module {
+    border-radius: 8px !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+.module h2,
+.module caption {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+    padding: 15px 20px !important;
+    border-radius: 8px 8px 0 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    border: none !important;
+}
+
+.module h2 a {
+    color: #ffffff !important;
+}
+
+.module h2 a:hover {
+    color: #e3f2fd !important;
+}
+
+/* Dashboard cards */
+.app-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+    gap: 25px !important;
+    margin-top: 20px !important;
+}
+
+/* Module tables */
+.module table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+.module table th {
+    background: #f8f8f8 !important;
+    color: #666666 !important;
+    font-weight: 600 !important;
+    text-align: left !important;
+    padding: 12px 20px !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+    font-size: 13px !important;
+    text-transform: uppercase !important;
+}
+
+.module table td {
+    padding: 15px 20px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.module table tr:hover {
+    background: #fafafa !important;
+}
+
+/* Add/Change links */
+.addlink,
+.changelink,
+.viewlink {
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    font-size: 13px !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: all 0.2s !important;
+    margin-right: 8px !important;
+}
+
+.addlink {
+    background: #2d8f3c !important;
+    color: #ffffff !important;
+}
+
+.addlink:hover {
+    background: #1f6b29 !important;
+    color: #ffffff !important;
+}
+
+.changelink,
+.viewlink {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+.changelink:hover,
+.viewlink:hover {
+    background: #0d47a1 !important;
+    color: #ffffff !important;
+}
+
+/* Recent actions */
+#recent-actions-module {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+}
+
+#recent-actions-module h2 {
+    background: #f8f8f8 !important;
+    color: #333333 !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+}
+
+#recent-actions-module ul {
+    padding: 0 !important;
+}
+
+#recent-actions-module li {
+    padding: 12px 20px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+#recent-actions-module li:last-child {
+    border-bottom: none !important;
+}
+
+#recent-actions-module li:hover {
+    background: #fafafa !important;
+}
+
+/* Dashboard welcome */
+.dashboard h1 {
+    color: #333333 !important;
+    font-size: 28px !important;
+    margin-bottom: 10px !important;
+}
+
+.dashboard .breadcrumbs {
+    display: none !important;
+}
+
+/* Remove default Django dashboard styles */
+#content-main > h1 {
+    display: none !important;
+}
+
+.app-list section {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Messages */
+.success,
+ul.messagelist li.success {
+    background: #d4edda !important;
+    color: #155724 !important;
+    border-left: 4px solid #28a745 !important;
+}
+
+.warning,
+ul.messagelist li.warning {
+    background: #fff3cd !important;
+    color: #856404 !important;
+    border-left: 4px solid #ffc107 !important;
+}
+
+.error,
+ul.messagelist li.error {
+    background: #f8d7da !important;
+    color: #721c24 !important;
+    border-left: 4px solid #dc3545 !important;
+}
+
+/* Pagination */
+.paginator a:link,
+.paginator a:visited {
+    background: #f8f8f8 !important;
+    border: 1px solid #e0e0e0 !important;
+    color: #1e5a8e !important;
+}
+
+.paginator a:hover {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+}
+
+.paginator .this-page {
+    background: #1e5a8e !important;
+    color: #ffffff !important;
+    border: 1px solid #1e5a8e !important;
+}
+
+/* Search */
+#changelist-search input[type="text"] {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+}
+
+#changelist-search input[type="text"]:focus {
+    border-color: #1e5a8e !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(30, 90, 142, 0.1) !important;
+}
+
+/* User tools */
+#user-tools {
+    color: #ffffff !important;
+}
+
+#user-tools a {
+    color: #ffffff !important;
+}
+
+#user-tools a:hover {
+    color: #e3f2fd !important;
+}
+
+/* Hide theme toggle button */
+#theme-toggle,
+.theme-toggle,
+button[data-theme-toggle] {
+    display: none !important;
+}

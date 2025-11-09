@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ thread.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="main-content">
+
+<!-- Breadcrumb -->
+<div style="margin-bottom: 16px; font-size: 14px; color: #888888;">
+    <a href="{% url 'forum:home' %}" style="color: #1e5a8e; text-decoration: none;">Diễn đàn</a>
+    <span> › </span>
+    <a href="{% url 'forum:category_view' thread.category.slug %}" style="color: #1e5a8e; text-decoration: none;">{{ thread.category.title }}</a>
+    <span> › </span>
+    <span>{{ thread.title }}</span>
+</div>
+
+<!-- Thông tin thread -->
+<div class="forum-section">
+    <div class="section-header">
+        <h2>
+            {% if thread.prefix %}
+            <span style="background: #1e5a8e; color: white; padding: 2px 8px; border-radius: 3px; font-size: 13px; margin-right: 8px;">{{ thread.get_prefix_display }}</span>
+            {% endif %}
+            {{ thread.title }}
+            {% if thread.locked %}
+            <span style="background-color:#dc3545;color:#fff;padding:2px 8px;border-radius:3px;font-size:12px;margin-left:8px;">🔒 KHÓA</span>
+            {% endif %}
+        </h2>
+    </div>
+
+    <div style="padding: 15px 20px; background-color: #f8f8f8; border-bottom: 1px solid #e0e0e0; font-size: 14px; color: #888888; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            Tác giả: <strong style="color: #1e5a8e;"><a href="{% url 'forum:user_profile' username=thread.author.username %}" style="color: #1e5a8e;">{{ thread.author.username }}</a></strong>
+            • {{ thread.created_at|date:"H:i d/m/Y" }}
+            • Chuyên mục: <a href="{% url 'forum:category_view' thread.category.slug %}" style="color: #1e5a8e;">{{ thread.category.title }}</a>
+            • 👁 {{ thread.views }} lượt xem
+        </div>
+        {% if request.user.is_authenticated %}
+        <div style="display: flex; gap: 10px;">
+            <form action="{% url 'forum:toggle_bookmark' thread_id=thread.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: 1px solid #e0e0e0; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">
+                    {% if is_bookmarked %}📕 Bỏ lưu{% else %}📑 Lưu{% endif %}
+                </button>
+            </form>
+            <form action="{% url 'forum:thread_follow_toggle' thread_id=thread.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: 1px solid #e0e0e0; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">
+                    {% if is_following %}🔕 Bỏ theo dõi{% else %}🔔 Theo dõi{% endif %}
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Danh sách post -->
+<div class="forum-section" style="margin-top: 20px;">
+    <div class="section-header">
+        <h2>💬 Bài viết ({{ posts.count }})</h2>
+    </div>
+
+    {% if posts %}
+        {% for p in posts %}
+        <div class="forum-item" style="display: grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 20px; border-bottom: 1px solid #f0f0f0;">
+            <!-- Author Info -->
+            <div style="text-align: center;">
+                <div class="avatar" style="margin: 0 auto 10px;">
+                    <img src="https://ui-avatars.com/api/?name={{ p.author.username }}&background=1e5a8e&color=fff" alt="{{ p.author.username }}">
+                </div>
+                <div style="font-weight: 600; color: #1e5a8e; margin-bottom: 4px;">{{ p.author.username }}</div>
+                <div style="font-size: 12px; color: #888888;">{{ p.created_at|date:"d/m/Y H:i" }}</div>
+            </div>
+            
+            <!-- Post Content -->
+            <div>
+                <div style="white-space: pre-line; color: #333333; line-height: 1.6;">
+                    {{ p.content }}
+                </div>
+                {% if p.image %}
+                <div style="margin-top: 15px;">
+                    <img src="{{ p.image.url }}" alt="Post image" style="max-width: 100%; border-radius: 8px;">
+                </div>
+                {% endif %}
+                
+                <!-- Reactions -->
+                {% if request.user.is_authenticated %}
+                <div class="reactions-container">
+                    <div class="reaction-buttons">
+                        <button class="reaction-btn" data-post-id="{{ p.id }}" data-reaction-type="like">👍</button>
+                        <button class="reaction-btn" data-post-id="{{ p.id }}" data-reaction-type="love">❤️</button>
+                        <button class="reaction-btn" data-post-id="{{ p.id }}" data-reaction-type="laugh">😂</button>
+                        <button class="reaction-btn" data-post-id="{{ p.id }}" data-reaction-type="angry">😠</button>
+                        <button class="reaction-btn" data-post-id="{{ p.id }}" data-reaction-type="sad">😢</button>
+                    </div>
+                    <div class="reaction-counts" data-post-id="{{ p.id }}">
+                        {% for reaction_type, emoji in p.reactions.all|dictsort:"reaction_type" %}
+                        <span class="reaction-count">{{ emoji }} {{ reaction_type.count }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div style="padding: 40px 20px; text-align: center; color: #888888;">
+            Chưa có bài viết nào.
+        </div>
+    {% endif %}
+</div>
+
+<!-- Form trả lời -->
+<div class="forum-section" style="margin-top: 20px;">
+    <div class="section-header">
+        <h2>✍️ Trả lời chủ đề</h2>
+    </div>
+    
+    <div style="padding: 20px;">
+        {% if not request.user.is_authenticated %}
+            <div style="background-color: #e3f2fd; color: #1565c0; padding: 15px; border-radius: 6px; border-left: 4px solid #1e5a8e;">
+                Bạn cần
+                <a href="{% url 'accounts:login' %}" style="color: #0d47a1; font-weight: 600;">
+                    đăng nhập
+                </a>
+                để trả lời chủ đề này.
+            </div>
+        {% else %}
+            {% if thread.locked %}
+                <div style="background-color: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; border-left: 4px solid #dc3545;">
+                    🔒 Chủ đề này đã bị khóa, không thể trả lời thêm.
+                </div>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333333;">Nội dung trả lời:</label>
+                        <textarea name="content" rows="6" style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; font-family: inherit; resize: vertical;" placeholder="Nhập nội dung trả lời...">{{ form.content.value|default:'' }}</textarea>
+                        {% if form.content.errors %}
+                            <div style="color: #dc3545; font-size: 13px; margin-top: 5px;">{{ form.content.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn-create-thread" style="padding: 10px 24px;">💬 Gửi trả lời</button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="{% static 'js/tinymce-init.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <title>Xác thực hai lớp (OTP)</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 360px;
+            margin: 40px auto;
+            line-height: 1.4;
+        }
+        h1 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .username {
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+        input[type="text"] { /* Sửa selector */
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #999;
+            margin-bottom: 12px;
+        }
+        button {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 0;
+            background: #111;
+            color: #fff;
+            cursor: pointer;
+        }
+        .errorlist {
+            color: #c00;
+            font-size: 14px;
+            margin-bottom: 12px;
+            list-style: none;
+            padding: 0;
+        }
+        .locked-box {
+            background: #fee;
+            border: 1px solid #f66;
+            color: #900;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        /* CSS cho checkbox */
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .form-check input {
+            width: auto;
+            margin: 0;
+        }
+        .form-check label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+        }
+        /* CSS cho các link thay thế */
+        .alt-methods {
+            margin-top: 16px;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        .alt-methods a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Nhập mã OTP</h1>
+    <div class="username">
+        Tài khoản: <strong>{{ username }}</strong>
+    </div>
+
+    {# Khi user bị khóa vì sai OTP quá nhiều lần #}
+    {% if locked %}
+        <div class="locked-box">
+            {{ error }}
+        </div>
+        <p style="text-align:center; font-size:14px;">
+            Tài khoản tạm bị khóa vì nhập OTP sai quá {{ lockout_threshold|default:5 }} lần.
+            Vui lòng liên hệ admin để mở khóa.
+        </p>
+    {% else %}
+        <div class="box">
+            {# Hiển thị message (VD: đã gửi email) #}
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="color: green; font-size: 14px; margin-bottom: 10px;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <label for="id_otp_code">Mã OTP (từ ứng dụng hoặc email)</label>
+                {{ form.otp_code }}
+
+                {% if form.errors %}
+                    {{ form.errors }}
+                {% endif %}
+
+                <div class="form-check">
+                    {{ form.remember_me }}
+                    <label for="{{ form.remember_me.id_for_label }}">
+                        Tin cậy thiết bị này
+                    </label>
+                </div>
+
+                <button type="submit">Xác nhận</button>
+
+                <div class="alt-methods">
+                    <a href="{% url 'accounts:send_email_otp' %}">Gửi mã OTP qua email</a>
+                    <br>
+                    <a href="{% url 'accounts:backup_code_verify' %}">Sử dụng mã khôi phục</a>
+                </div>
+            </form>
+        </div>
+
+        <p style="font-size:13px;color:#777;margin-top:12px;text-align:center;">
+            Mã OTP thay đổi mỗi 30 giây trong ứng dụng Authenticator.
+        </p>
+    {% endif %}
+
+</body>
+</html>

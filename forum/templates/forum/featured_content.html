@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Featured Content - VOZ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="main-content">
+        <div class="forum-section">
+            <div class="section-header">
+                <h2>⭐ Featured Content</h2>
+            </div>
+            <div class="forum-list">
+                {% for thread in threads %}
+                <div class="forum-item">
+                    <div class="forum-icon">⭐</div>
+                    <div class="forum-info">
+                        <h3>
+                            {% if thread.prefix %}
+                            <span style="background: #1e5a8e; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px; margin-right: 5px;">{{ thread.get_prefix_display }}</span>
+                            {% endif %}
+                            <a href="{% url 'forum:thread_detail' thread.id %}">{{ thread.title }}</a>
+                        </h3>
+                        <p class="forum-stats">
+                            <span>{{ thread.category.title }}</span>
+                            <span>{{ thread.post_count }} replies</span>
+                            <span>{{ thread.views }} views</span>
+                        </p>
+                    </div>
+                    <div class="forum-latest">
+                        <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ thread.author.username }}&background=1e5a8e&color=fff" alt="{{ thread.author.username }}"></div>
+                        <div class="latest-info">
+                            <a href="{% url 'forum:thread_detail' thread.id %}" class="thread-title">{{ thread.title }}</a>
+                            <div class="meta">
+                                <span class="author">{{ thread.author.username }}</span>
+                                <span class="time">{{ thread.created_at|timesince }} trước</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="forum-item">
+                    <div class="forum-icon">⭐</div>
+                    <div class="forum-info">
+                        <h3>Chưa có nội dung featured</h3>
+                        <p class="forum-stats">
+                            <span>Admin chưa đánh dấu thread nào là featured</span>
+                        </p>
+                    </div>
+                    <div class="forum-latest"></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>ℹ️ Featured Content</h3>
+            <p style="color: #888888; font-size: 13px; line-height: 1.8;">
+                Những thread nổi bật được admin chọn, sắp xếp theo lượt xem.
+            </p>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>📊 Thống kê</h3>
+            <div style="color: #888888; font-size: 13px; line-height: 1.8;">
+                <div style="margin-bottom: 8px;">
+                    <strong style="color: #1e5a8e;">{{ threads|length }}</strong> Featured threads
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

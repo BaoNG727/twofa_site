@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile_user.username }} - Profile{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    
+    <div class="profile-header">
+        <img src="https://ui-avatars.com/api/?name={{ profile_user.username }}&size=120&background=1e5a8e&color=fff&bold=true" 
+             alt="{{ profile_user.username }}" 
+             class="profile-avatar">
+        
+        <h1 class="profile-username">{{ profile_user.username }}</h1>
+        
+        <span class="profile-rank">{{ profile.get_rank }}</span>
+        
+        {% if profile.bio %}
+        <div class="profile-bio">
+            {{ profile.bio }}
+        </div>
+        {% endif %}
+        
+        <div class="profile-stats">
+            <div class="profile-stat">
+                <div class="profile-stat-value">{{ profile.post_count }}</div>
+                <div class="profile-stat-label">Bài viết</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">{{ profile.thread_count }}</div>
+                <div class="profile-stat-label">Chủ đề</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">{{ profile.reputation }}</div>
+                <div class="profile-stat-label">Điểm uy tín</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">{{ profile.joined_date|date:"d/m/Y" }}</div>
+                <div class="profile-stat-label">Tham gia</div>
+            </div>
+        </div>
+        
+        {% if request.user == profile_user %}
+        <div style="margin-top: 20px;">
+            <a href="{% url 'forum:edit_profile' %}" class="btn-create-thread">✏️ Chỉnh sửa profile</a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-top: 30px;">
+        
+        <!-- Recent Threads -->
+        <div>
+            <div class="category-box">
+                <h2 style="font-size: 18px; margin-bottom: 20px; color: #1e5a8e;">📝 Chủ đề gần đây</h2>
+                
+                {% if user_threads %}
+                    {% for thread in user_threads %}
+                    <div class="thread-item">
+                        <div class="thread-main">
+                            <h3 class="thread-title">
+                                {% if thread.prefix %}
+                                    <span class="thread-prefix prefix-{{ thread.prefix }}">
+                                        {{ thread.get_prefix_display }}
+                                    </span>
+                                {% endif %}
+                                <a href="{% url 'forum:thread_detail' pk=thread.id %}">{{ thread.title }}</a>
+                            </h3>
+                            <div class="thread-meta">
+                                <span>📁 {{ thread.category.title }}</span>
+                                <span>💬 {{ thread.post_count }} replies</span>
+                                <span>👁️ {{ thread.views }} views</span>
+                                <span>🕐 {{ thread.created_at|date:"d/m/Y H:i" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #888;">Chưa có chủ đề nào.</p>
+                {% endif %}
+            </div>
+            
+            <!-- Recent Posts -->
+            <div class="category-box" style="margin-top: 30px;">
+                <h2 style="font-size: 18px; margin-bottom: 20px; color: #1e5a8e;">💬 Bài viết gần đây</h2>
+                
+                {% if user_posts %}
+                    {% for post in user_posts %}
+                    <div style="padding: 15px; background: #f9f9f9; border-radius: 6px; margin-bottom: 12px;">
+                        <div style="font-size: 14px; color: #666; margin-bottom: 8px;">
+                            Trong: <a href="{% url 'forum:thread_detail' pk=post.thread.id %}" style="color: #1e5a8e; font-weight: 600;">{{ post.thread.title }}</a>
+                        </div>
+                        <div style="font-size: 14px; color: #333; margin-bottom: 8px;">
+                            {{ post.content|truncatewords:30 }}
+                        </div>
+                        <div style="font-size: 12px; color: #888;">
+                            {{ post.created_at|date:"d/m/Y H:i" }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #888;">Chưa có bài viết nào.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Sidebar Info -->
+        <div>
+            {% if request.user == profile_user and bookmarked_threads %}
+            <div class="category-box">
+                <h2 style="font-size: 18px; margin-bottom: 20px; color: #1e5a8e;">📑 Đã lưu</h2>
+                {% for bookmark in bookmarked_threads %}
+                <div style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+                    <a href="{% url 'forum:thread_detail' pk=bookmark.thread.id %}" style="color: #333; font-size: 14px; display: block;">
+                        {{ bookmark.thread.title|truncatewords:8 }}
+                    </a>
+                    <div style="font-size: 12px; color: #888; margin-top: 4px;">
+                        {{ bookmark.created_at|date:"d/m/Y" }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Info Box -->
+            <div class="category-box" style="margin-top: 20px;">
+                <h2 style="font-size: 18px; margin-bottom: 15px; color: #1e5a8e;">ℹ️ Thông tin</h2>
+                
+                {% if profile.location %}
+                <div style="margin-bottom: 12px;">
+                    <strong>📍 Địa điểm:</strong> {{ profile.location }}
+                </div>
+                {% endif %}
+                
+                {% if profile.website %}
+                <div style="margin-bottom: 12px;">
+                    <strong>🌐 Website:</strong> <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a>
+                </div>
+                {% endif %}
+                
+                <div style="margin-bottom: 12px;">
+                    <strong>🕐 Hoạt động lần cuối:</strong> {{ profile.last_activity|date:"d/m/Y H:i" }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Đăng ký - VOZ{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 600px; margin: 40px auto; padding: 0 20px;">
+    <div class="forum-section">
+        <div class="section-header">
+            <h2>📝 Đăng ký tài khoản</h2>
+        </div>
+
+        <div style="padding: 30px;">
+            <p style="margin-bottom: 25px; color: #666666; line-height: 1.6;">
+                Tạo tài khoản mới để tham gia diễn đàn và bật xác thực 2 lớp (2FA).
+            </p>
+
+            {% if form.non_field_errors %}
+                <div style="background-color: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; border-left: 4px solid #dc3545; margin-bottom: 20px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post" novalidate autocomplete="off">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div style="margin-bottom: 20px;">
+                    <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333333;">
+                        {{ field.label }}
+                    </label>
+                    
+                    {% if field.field.widget.input_type == 'text' or field.field.widget.input_type == 'email' %}
+                        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ field.value|default:'' }}"
+                               style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; font-family: inherit;"
+                               {% if field.field.required %}required{% endif %}>
+                    {% elif field.field.widget.input_type == 'password' %}
+                        <input type="password" name="{{ field.name }}" id="{{ field.id_for_label }}"
+                               style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; font-family: inherit;"
+                               {% if field.field.required %}required{% endif %}>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    
+                    {% if field.help_text %}
+                        <div style="color: #888888; font-size: 12px; margin-top: 5px;">{{ field.help_text|safe }}</div>
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <div style="color: #dc3545; font-size: 13px; margin-top: 5px;">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn-register" style="width: 100%; padding: 12px; font-size: 16px;">
+                    ✨ Tạo tài khoản
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <span style="color: #666666;">Đã có tài khoản?</span>
+                <a href="{% url 'accounts:login' %}" style="color: #1e5a8e; text-decoration: none; font-weight: 600; margin-left: 5px;">
+                    Đăng nhập ngay
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

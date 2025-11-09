@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}📑 Đã lưu - VOZ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+    <div class="main-content">
+        <div class="forum-section">
+            <div class="section-header">
+                <h2>📑 Chủ đề đã lưu</h2>
+            </div>
+            <div class="forum-list">
+                {% for bookmark in bookmarks %}
+                <div class="forum-item">
+                    <div class="forum-icon">📑</div>
+                    <div class="forum-info">
+                        <h3>
+                            {% if bookmark.thread.prefix %}
+                            <span style="background: #1e5a8e; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px; margin-right: 5px;">{{ bookmark.thread.get_prefix_display }}</span>
+                            {% endif %}
+                            <a href="{% url 'forum:thread_detail' bookmark.thread.id %}">{{ bookmark.thread.title }}</a>
+                        </h3>
+                        <p class="forum-stats">
+                            <span>{{ bookmark.thread.category.title }}</span>
+                            <span>{{ bookmark.thread.post_count }} replies</span>
+                            <span>{{ bookmark.thread.views }} views</span>
+                            <span>Lưu: {{ bookmark.created_at|date:"d/m/Y" }}</span>
+                        </p>
+                    </div>
+                    <div class="forum-latest">
+                        <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ bookmark.thread.author.username }}&background=1e5a8e&color=fff" alt="{{ bookmark.thread.author.username }}"></div>
+                        <div class="latest-info">
+                            <a href="{% url 'forum:thread_detail' bookmark.thread.id %}" class="thread-title">{{ bookmark.thread.author.username }}</a>
+                            <div class="meta">
+                                <form action="{% url 'forum:toggle_bookmark' thread_id=bookmark.thread.id %}" method="post" class="form-submit">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background: none; border: none; color: #f44336; cursor: pointer; font-size: 12px; padding: 0;">
+                                        🗑️ Bỏ lưu
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="forum-item">
+                    <div class="forum-icon">📑</div>
+                    <div class="forum-info">
+                        <h3>Chưa lưu chủ đề nào</h3>
+                        <p class="forum-stats">
+                            <span>Bạn chưa lưu chủ đề nào. Hãy bookmark các thread yêu thích!</span>
+                        </p>
+                    </div>
+                    <div class="forum-latest"></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>ℹ️ Thông tin</h3>
+            <p style="color: #888888; font-size: 13px; line-height: 1.8;">
+                Quản lý các thread bạn đã lưu. Click vào nút "Bỏ lưu" để xóa khỏi danh sách.
+            </p>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

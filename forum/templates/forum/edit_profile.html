@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Chỉnh sửa profile - VOZ{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+    
+    <div class="category-box">
+        <h1 style="font-size: 24px; margin-bottom: 25px; color: #1e5a8e;">
+            ✏️ Chỉnh sửa profile
+        </h1>
+        
+        <form method="post" class="form-submit">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Bio</label>
+                <textarea name="bio" rows="4" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-family: inherit; font-size: 14px;">{{ profile.bio }}</textarea>
+                <div style="font-size: 12px; color: #888; margin-top: 4px;">Tối đa 500 ký tự</div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Địa điểm</label>
+                <input type="text" name="location" value="{{ profile.location }}" 
+                       style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Website</label>
+                <input type="url" name="website" value="{{ profile.website }}" 
+                       placeholder="https://example.com"
+                       style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Chữ ký</label>
+                <textarea name="signature" rows="3" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-family: inherit; font-size: 14px;">{{ profile.signature }}</textarea>
+                <div style="font-size: 12px; color: #888; margin-top: 4px;">Tối đa 200 ký tự. Hiển thị ở cuối mỗi bài viết của bạn.</div>
+            </div>
+            
+            <div style="display: flex; gap: 12px;">
+                <button type="submit" class="btn-create-thread">💾 Lưu thay đổi</button>
+                <a href="{% url 'forum:user_profile' username=request.user.username %}" class="btn-login">Hủy</a>
+            </div>
+        </form>
+    </div>
+    
+</div>
+{% endblock %}

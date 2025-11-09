@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}404 - Không tìm thấy trang{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 80px auto; padding: 0 20px; text-align: center;">
+    
+    <div class="category-box">
+        <div style="font-size: 120px; margin-bottom: 20px;">😕</div>
+        
+        <h1 style="font-size: 48px; font-weight: bold; color: #1e5a8e; margin-bottom: 15px;">404</h1>
+        
+        <h2 style="font-size: 24px; color: #333; margin-bottom: 20px;">
+            Không tìm thấy trang
+        </h2>
+        
+        <p style="font-size: 16px; color: #666; margin-bottom: 30px; line-height: 1.6;">
+            Trang bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.<br>
+            Vui lòng kiểm tra lại đường dẫn URL hoặc quay về trang chủ.
+        </p>
+        
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'forum:home' %}" class="btn-create-thread" style="padding: 12px 30px;">
+                🏠 Về trang chủ
+            </a>
+            <a href="javascript:history.back()" class="btn-login" style="padding: 12px 30px;">
+                ← Quay lại
+            </a>
+            <a href="{% url 'forum:search' %}" class="btn-login" style="padding: 12px 30px;">
+                🔍 Tìm kiếm
+            </a>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

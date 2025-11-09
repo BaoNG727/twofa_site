@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}VOZ - Forums{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+    <div class="main-content">
+        {% for category in categories %}
+        <div class="forum-section">
+            <div class="section-header">
+                <h2>{{ category.title }}</h2>
+            </div>
+            <div class="forum-list">
+                {% if category.sub_forums.all %}
+                    {% for subforum in category.sub_forums.all %}
+                    <div class="forum-item">
+                        <div class="forum-icon">{{ subforum.icon|default:"💬" }}</div>
+                        <div class="forum-info">
+                            <h3><a href="{% url 'forum:category_view' subforum.slug %}">{{ subforum.title }}</a></h3>
+                            {% if subforum.description %}
+                            <p style="color: #707070; font-size: 13px; margin-top: 4px;">{{ subforum.description }}</p>
+                            {% endif %}
+                            <p class="forum-stats">
+                                <span>Threads: {{ subforum.thread_count }}</span>
+                                <span>Messages: {{ subforum.post_count }}</span>
+                            </p>
+                        </div>
+                        <div class="forum-latest">
+                            {% with latest=subforum.latest_post %}
+                            {% if latest %}
+                                <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ latest.author.username }}&background=8b9dc3&color=fff" alt="{{ latest.author.username }}"></div>
+                                <div class="latest-info">
+                                    <a href="{% url 'forum:thread_detail' latest.thread.id %}" class="thread-title">{{ latest.thread.title }}</a>
+                                    <div class="meta">
+                                        <span class="author">{{ latest.author.username }}</span>
+                                        <span class="time">{{ latest.created_at|timesince }} trước</span>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="latest-info">
+                                    <span class="meta">Chưa có bài viết</span>
+                                </div>
+                            {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="forum-item">
+                        <div class="forum-icon">{{ category.icon|default:"📝" }}</div>
+                        <div class="forum-info">
+                            <h3><a href="{% url 'forum:category_view' category.slug %}">{{ category.title }}</a></h3>
+                            {% if category.description %}
+                            <p style="color: #707070; font-size: 13px; margin-top: 4px;">{{ category.description }}</p>
+                            {% endif %}
+                            <p class="forum-stats">
+                                <span>Threads: {{ category.thread_count }}</span>
+                                <span>Messages: {{ category.post_count }}</span>
+                            </p>
+                        </div>
+                        <div class="forum-latest">
+                            {% with latest=category.latest_post %}
+                            {% if latest %}
+                                <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ latest.author.username }}&background=8b9dc3&color=fff" alt="{{ latest.author.username }}"></div>
+                                <div class="latest-info">
+                                    <a href="{% url 'forum:thread_detail' latest.thread.id %}" class="thread-title">{{ latest.thread.title }}</a>
+                                    <div class="meta">
+                                        <span class="author">{{ latest.author.username }}</span>
+                                        <span class="time">{{ latest.created_at|timesince }} trước</span>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="latest-info">
+                                    <span class="meta">Chưa có bài viết</span>
+                                </div>
+                            {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="forum-section">
+            <div class="section-header">
+                <h2>Chào mừng đến với diễn đàn</h2>
+            </div>
+            <div class="forum-list">
+                <div class="forum-item">
+                    <div class="forum-icon">📝</div>
+                    <div class="forum-info">
+                        <h3><a href="#">Chưa có danh mục nào</a></h3>
+                        <p class="forum-stats">
+                            <span>Hãy tạo danh mục đầu tiên!</span>
+                        </p>
+                    </div>
+                    <div class="forum-latest"></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>🔥 Trending content</h3>
+            <div class="trending-list">
+                {% for thread in featured_threads %}
+                <div class="trending-item">
+                    <div class="avatar-small"><img src="https://ui-avatars.com/api/?name={{ thread.author.username }}&background=8b9dc3&color=fff" alt="{{ thread.author.username }}"></div>
+                    <div class="trending-info">
+                        <a href="{% url 'forum:thread_detail' thread.id %}">{{ thread.title }}</a>
+                        <span class="meta">{{ thread.author.username }} • {{ thread.views }} views</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="trending-item">
+                    <div class="trending-info">
+                        <span class="meta">Chưa có nội dung trending</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>📝 Latest posts</h3>
+            <div class="latest-posts-list">
+                {% for post in latest_posts %}
+                <div class="post-item">
+                    <div class="avatar-small"><img src="https://ui-avatars.com/api/?name={{ post.author.username }}&background=8b9dc3&color=fff" alt="{{ post.author.username }}"></div>
+                    <div class="post-info">
+                        <a href="{% url 'forum:thread_detail' post.thread.id %}">{{ post.thread.title }}</a>
+                        <span class="meta">{{ post.author.username }} • {{ post.created_at|timesince }} trước</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="post-item">
+                    <div class="post-info">
+                        <span class="meta">Chưa có bài viết mới</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>📊 Forum Statistics</h3>
+            <div style="color: #707070; font-size: 13px; line-height: 1.8;">
+                <div style="margin-bottom: 8px;">
+                    <strong style="color: #8b9dc3;">{{ total_threads }}</strong> Threads
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <strong style="color: #8b9dc3;">{{ total_posts }}</strong> Messages
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <strong style="color: #8b9dc3;">{{ total_members }}</strong> Members
+                </div>
+                {% if latest_member %}
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #30363d;">
+                    Latest member: <a href="#" style="color: #8b9dc3;">{{ latest_member.username }}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

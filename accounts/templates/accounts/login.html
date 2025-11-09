@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Đăng nhập - VOZ{% endblock %}
+{% block content %}
+
+<div style="max-width: 500px; margin: 40px auto; padding: 0 20px;">
+    <div class="forum-section">
+        <div class="section-header">
+            <h2>🔐 Đăng nhập</h2>
+        </div>
+
+        <div style="padding: 30px;">
+            {% if form.non_field_errors %}
+                <div style="background-color: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; border-left: 4px solid #dc3545; margin-bottom: 20px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333333;">
+                        Tên đăng nhập / Username
+                    </label>
+                    <input type="text" name="username" value="{{ form.username.value|default:'' }}" 
+                           style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; font-family: inherit;"
+                           placeholder="Nhập tên đăng nhập" required>
+                    {% if form.username.errors %}
+                        <div style="color: #dc3545; font-size: 13px; margin-top: 5px;">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333333;">
+                        Mật khẩu
+                    </label>
+                    <input type="password" name="password" 
+                           style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; font-family: inherit;"
+                           placeholder="Nhập mật khẩu" required>
+                    {% if form.password.errors %}
+                        <div style="color: #dc3545; font-size: 13px; margin-top: 5px;">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-register" style="width: 100%; padding: 12px; font-size: 16px;">
+                    🚀 Đăng nhập
+                </button>
+
+                <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                    <a href="{% url 'accounts:password_reset' %}" style="color: #1e5a8e; text-decoration: none; font-size: 14px;">
+                        🔑 Quên mật khẩu?
+                    </a>
+                    <span style="color: #999999; margin: 0 10px;">•</span>
+                    <a href="{% url 'accounts:register' %}" style="color: #1e5a8e; text-decoration: none; font-size: 14px;">
+                        📝 Đăng ký tài khoản mới
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% if page_obj.has_other_pages %}
+<div class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 30px 0; padding: 20px;">
+    
+    {% if page_obj.has_previous %}
+        <a href="?page=1" class="pagination-btn" style="padding: 8px 12px; background: white; border: 1px solid #e0e0e0; border-radius: 4px; color: #1e5a8e; text-decoration: none; transition: all 0.2s;">« First</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn" style="padding: 8px 12px; background: white; border: 1px solid #e0e0e0; border-radius: 4px; color: #1e5a8e; text-decoration: none; transition: all 0.2s;">‹ Prev</a>
+    {% else %}
+        <span class="pagination-btn disabled" style="padding: 8px 12px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 4px; color: #ccc; cursor: not-allowed;">« First</span>
+        <span class="pagination-btn disabled" style="padding: 8px 12px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 4px; color: #ccc; cursor: not-allowed;">‹ Prev</span>
+    {% endif %}
+    
+    <span style="padding: 8px 16px; background: #e3f2fd; border-radius: 4px; font-weight: 600; color: #1e5a8e;">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+    
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn" style="padding: 8px 12px; background: white; border: 1px solid #e0e0e0; border-radius: 4px; color: #1e5a8e; text-decoration: none; transition: all 0.2s;">Next ›</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-btn" style="padding: 8px 12px; background: white; border: 1px solid #e0e0e0; border-radius: 4px; color: #1e5a8e; text-decoration: none; transition: all 0.2s;">Last »</a>
+    {% else %}
+        <span class="pagination-btn disabled" style="padding: 8px 12px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 4px; color: #ccc; cursor: not-allowed;">Next ›</span>
+        <span class="pagination-btn disabled" style="padding: 8px 12px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 4px; color: #ccc; cursor: not-allowed;">Last »</span>
+    {% endif %}
+    
+</div>
+
+<style>
+.pagination-btn:hover:not(.disabled) {
+    background: #e3f2fd !important;
+    border-color: #1e5a8e !important;
+}
+</style>
+{% endif %}

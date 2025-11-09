@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.title }} - Diễn đàn{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+    <div class="main-content">
+        
+    <div class="forum-section">
+        <div class="section-header">
+            <h2>{{ category.icon|default:"📁" }} {{ category.title }}</h2>
+        </div>
+        
+        <div style="padding: 20px; background: white; border-bottom: 1px solid #e0e0e0;">
+            {% if category.description %}
+            <p style="color: #666; margin-bottom: 15px;">{{ category.description }}</p>
+            {% endif %}
+            
+            <div style="display: flex; gap: 24px; font-size: 13px; color: #888;">
+                <div>
+                    <strong style="color: #1e5a8e;">{{ category.thread_count }}</strong> Chủ đề
+                </div>
+                <div>
+                    <strong style="color: #1e5a8e;">{{ category.post_count }}</strong> Bài viết
+                </div>
+            </div>
+            
+            {% if request.user.is_authenticated %}
+            <div style="margin-top: 15px;">
+                <a href="{% url 'forum:thread_create' %}" class="btn-create-thread" style="display: inline-block; padding: 10px 20px;">
+                    ✏️ Tạo chủ đề mới
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+    <!-- Threads List -->
+    <div class="forum-list">
+        {% for thread in threads %}
+        <div class="forum-item">
+            <div class="forum-icon">
+                {% if thread.locked %}🔒
+                {% elif thread.pinned %}📌
+                {% else %}💬{% endif %}
+            </div>
+            <div class="forum-info">
+                <h3>
+                    {% if thread.prefix %}
+                    <span style="background: #1e5a8e; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px; margin-right: 5px;">{{ thread.get_prefix_display }}</span>
+                    {% endif %}
+                    <a href="{% url 'forum:thread_detail' thread.id %}">{{ thread.title }}</a>
+                </h3>
+                <p class="forum-stats">
+                    <span>Bởi {{ thread.author.username }}</span>
+                    <span>{{ thread.post_count }} replies</span>
+                    <span>{{ thread.views }} views</span>
+                    <span>{{ thread.created_at|timesince }} trước</span>
+                </p>
+            </div>
+            <div class="forum-latest">
+                {% with latest=thread.latest_post %}
+                {% if latest %}
+                <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ latest.author.username }}&background=1e5a8e&color=fff" alt="{{ latest.author.username }}"></div>
+                <div class="latest-info">
+                    <a href="{% url 'forum:thread_detail' thread.id %}" class="thread-title">{{ latest.author.username }}</a>
+                    <div class="meta">
+                        <span class="time">{{ latest.created_at|timesince }} trước</span>
+                    </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="forum-item">
+            <div class="forum-icon">📝</div>
+            <div class="forum-info">
+                <h3>Chưa có chủ đề nào</h3>
+                <p class="forum-stats">
+                    <span>Chưa có chủ đề nào trong chuyên mục này</span>
+                    {% if request.user.is_authenticated %}
+                    <span><a href="{% url 'forum:thread_create' %}" class="btn-create-thread">Tạo chủ đề đầu tiên</a></span>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="forum-latest"></div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% include "pagination.html" with page_obj=threads %}
+    
+    </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>ℹ️ {{ category.title }}</h3>
+            <p style="color: #888888; font-size: 13px; line-height: 1.8;">
+                {% if category.description %}
+                    {{ category.description }}
+                {% else %}
+                    Danh sách tất cả threads trong chuyên mục này.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="sidebar-section">
+            <h3>📊 Thống kê</h3>
+            <div style="color: #888888; font-size: 13px; line-height: 1.8;">
+                <div style="margin-bottom: 8px;">
+                    <strong style="color: #1e5a8e;">{{ category.thread_count }}</strong> Chủ đề
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <strong style="color: #1e5a8e;">{{ category.post_count }}</strong> Bài viết
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+</div>
+{% endblock %}

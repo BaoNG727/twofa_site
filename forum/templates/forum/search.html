@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}🔍 Tìm kiếm{% if query %}: {{ query }}{% endif %} - VOZ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+    <div class="main-content">
+        <div class="forum-section">
+            <div class="section-header">
+                <h2>🔍 Tìm kiếm</h2>
+            </div>
+            
+            <div style="padding: 20px; background: white; margin-bottom: 20px;">
+                <form action="{% url 'forum:search' %}" method="get">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" name="q" value="{{ query }}" 
+                               placeholder="Nhập từ khóa tìm kiếm..." 
+                               style="flex: 1; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px;">
+                        <button type="submit" class="btn-create-thread">Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        
+            {% if query %}
+                <div style="padding: 0 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 15px; color: #666;">
+                        Kết quả cho: <strong style="color: #1e5a8e;">"{{ query }}"</strong>
+                    </h3>
+                </div>
+            {% endif %}
+            
+            <div class="forum-list">
+                {% if query %}
+                    <!-- Threads Results -->
+                    {% if threads %}
+                        {% for thread in threads %}
+                        <div class="forum-item">
+                            <div class="forum-icon">📝</div>
+                            <div class="forum-info">
+                                <h3>
+                                    {% if thread.prefix %}
+                                    <span style="background: #1e5a8e; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px; margin-right: 5px;">{{ thread.get_prefix_display }}</span>
+                                    {% endif %}
+                                    <a href="{% url 'forum:thread_detail' thread.id %}">{{ thread.title }}</a>
+                                </h3>
+                                <p class="forum-stats">
+                                    <span>{{ thread.category.title }}</span>
+                                    <span>{{ thread.post_count }} replies</span>
+                                    <span>{{ thread.views }} views</span>
+                                </p>
+                            </div>
+                            <div class="forum-latest">
+                                <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ thread.author.username }}&background=1e5a8e&color=fff" alt="{{ thread.author.username }}"></div>
+                                <div class="latest-info">
+                                    <a href="{% url 'forum:thread_detail' thread.id %}" class="thread-title">Thread</a>
+                                    <div class="meta">
+                                        <span class="author">{{ thread.author.username }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Posts Results -->
+                    {% if posts %}
+                        {% for post in posts %}
+                        <div class="forum-item">
+                            <div class="forum-icon">💬</div>
+                            <div class="forum-info">
+                                <h3 style="font-size: 14px; font-weight: normal;">{{ post.content|truncatewords:20 }}</h3>
+                                <p class="forum-stats">
+                                    <span>Trong: <a href="{% url 'forum:thread_detail' post.thread.id %}" style="color: #1e5a8e; font-weight: 600;">{{ post.thread.title|truncatewords:10 }}</a></span>
+                                    <span>{{ post.created_at|timesince }} trước</span>
+                                </p>
+                            </div>
+                            <div class="forum-latest">
+                                <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ post.author.username }}&background=1e5a8e&color=fff" alt="{{ post.author.username }}"></div>
+                                <div class="latest-info">
+                                    <a href="{% url 'forum:thread_detail' post.thread.id %}" class="thread-title">Post</a>
+                                    <div class="meta">
+                                        <span class="author">{{ post.author.username }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    {% if not threads and not posts %}
+                    <div class="forum-item">
+                        <div class="forum-icon">🔍</div>
+                        <div class="forum-info">
+                            <h3>Không tìm thấy kết quả</h3>
+                            <p class="forum-stats">
+                                <span>Không tìm thấy kết quả nào cho "{{ query }}"</span>
+                            </p>
+                        </div>
+                        <div class="forum-latest"></div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="forum-item">
+                        <div class="forum-icon">🔍</div>
+                        <div class="forum-info">
+                            <h3>Tìm kiếm</h3>
+                            <p class="forum-stats">
+                                <span>Nhập từ khóa để tìm kiếm chủ đề và bài viết</span>
+                            </p>
+                        </div>
+                        <div class="forum-latest"></div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>ℹ️ Tìm kiếm</h3>
+            <p style="color: #888888; font-size: 13px; line-height: 1.8;">
+                Tìm kiếm threads và posts theo từ khóa. Kết quả hiển thị theo độ liên quan.
+            </p>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

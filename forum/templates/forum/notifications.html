@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}🔔 Thông báo - VOZ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+    <div class="main-content">
+        <div class="forum-section">
+            <div class="section-header">
+                <h2>🔔 Thông báo</h2>
+            </div>
+            <div class="forum-list">
+                {% for notif in notifications %}
+                <div class="forum-item" style="background: {% if not notif.is_read %}#f0f7ff{% endif %};">
+                    <div class="forum-icon">
+                        {% if notif.notification_type == 'thread_reply' %}💬
+                        {% elif notif.notification_type == 'mention' %}@
+                        {% elif notif.notification_type == 'thread_follow' %}🔔
+                        {% else %}📢{% endif %}
+                    </div>
+                    <div class="forum-info">
+                        <h3 style="font-size: 14px; font-weight: normal;">{{ notif.message }}</h3>
+                        <p class="forum-stats">
+                            <span>{{ notif.created_at|timesince }} trước</span>
+                            {% if notif.thread %}
+                            <span>→ <a href="{% url 'forum:thread_detail' notif.thread.id %}" style="color: #1e5a8e; font-weight: 600;">{{ notif.thread.title|truncatewords:8 }}</a></span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="forum-latest">
+                        {% if notif.sender %}
+                        <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ notif.sender.username }}&background=1e5a8e&color=fff" alt="{{ notif.sender.username }}"></div>
+                        <div class="latest-info">
+                            <div class="meta">
+                                <span class="author">{{ notif.sender.username }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="forum-item">
+                    <div class="forum-icon">🔔</div>
+                    <div class="forum-info">
+                        <h3>Chưa có thông báo</h3>
+                        <p class="forum-stats">
+                            <span>Bạn chưa có thông báo nào</span>
+                        </p>
+                    </div>
+                    <div class="forum-latest"></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>ℹ️ Thông tin</h3>
+            <p style="color: #888888; font-size: 13px; line-height: 1.8;">
+                Theo dõi tất cả hoạt động liên quan đến bạn: reply, mention, reactions.
+            </p>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

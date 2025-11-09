@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Tài khoản của bạn{% endblock %}
+{% block content %}
+
+<h1 class="page-heading">Tài khoản của {{ request.user.username }}</h1>
+
+<div class="card">
+    <div class="card-header">Tình trạng bảo mật</div>
+
+    <div class="card-line">
+        Email đã xác thực:
+        {% if security_info.email_verified %}
+            <span class="badge">ĐÃ XÁC THỰC</span>
+        {% else %}
+            <span class="badge" style="background-color:#fdecea;color:#d93025;border-color:#f5c6cb;">
+                CHƯA XÁC THỰC
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="card-line">
+        2FA (OTP) đang bật:
+        {% if security_info.is_2fa_enabled %}
+            <span class="badge">ĐÃ BẬT</span>
+        {% else %}
+            <span class="badge">CHƯA BẬT</span>
+        {% endif %}
+    </div>
+
+    <div class="card-line">
+        Bị ép phải bật 2FA:
+        {% if security_info.must_setup_2fa %}
+            <span class="badge">BẮT BUỘC</span>
+        {% else %}
+            <span class="badge">KHÔNG BẮT BUỘC</span>
+        {% endif %}
+    </div>
+
+    <div class="card-line">
+        Tài khoản bị khóa OTP:
+        {% if security_info.otp_locked %}
+            <span class="badge" style="background-color:#fdecea;color:#d93025;border-color:#f5c6cb;">
+                ĐÃ KHÓA
+            </span>
+        {% else %}
+            <span class="badge">KHÔNG</span>
+        {% endif %}
+    </div>
+
+    <div class="card-line">
+        Số lần OTP sai gần nhất: <strong>{{ security_info.failed_otp_attempts }}</strong>
+    </div>
+
+    <div class="card-line">
+        Bị ép đổi mật khẩu:
+        {% if security_info.must_change_password %}
+            <span class="badge" style="background-color:#fdecea;color:#d93025;border-color:#f5c6cb;">
+                PHẢI ĐỔI NGAY
+            </span>
+        {% else %}
+            <span class="badge">KHÔNG</span>
+        {% endif %}
+    </div>
+
+    <div class="card-line">
+        Lần đăng nhập gần nhất:
+        <strong>{{ security_info.last_login }}</strong>
+    </div>
+
+    <div class="mt-24">
+        {% if security_info.must_change_password %}
+            <a class="btn-primary" style="width:auto;display:inline-block;"
+               href="{% url 'accounts:change_password' %}">
+                Đổi mật khẩu ngay
+            </a>
+        {% endif %}
+
+        {% if not security_info.is_2fa_enabled %}
+            <a class="btn-primary" style="width:auto;display:inline-block;margin-left:.5rem;"
+               href="{% url 'accounts:enable_2fa' %}">
+                Bật 2FA / Quét QR
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+{% if request.user.is_staff_role %}
+<div class="card">
+    <div class="card-header">Khu vực STAFF / ADMIN</div>
+    <div class="card-line">
+        Bạn có quyền khoá/mở OTP người dùng, reset OTP, ép bật 2FA toàn hệ thống,
+        và xem nhật ký bảo mật trong trang Admin.
+    </div>
+    <div class="mt-16">
+        <a class="btn-primary" style="width:auto;display:inline-block;" href="{% url 'accounts:staff_only' %}">
+            Vào khu vực STAFF
+        </a>
+        <a class="btn-primary" style="width:auto;display:inline-block;margin-left:.5rem;" href="/admin/">
+            Vào trang Admin
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

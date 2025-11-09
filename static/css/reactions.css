@@ -1,0 +1,218 @@
+/* Reaction System Styles */
+.reactions-container {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.reaction-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.reaction-btn {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.reaction-btn:hover {
+    background: #e8e8e8;
+    border-color: #1e5a8e;
+    transform: scale(1.1);
+}
+
+.reaction-btn.active {
+    background: #e3f2fd;
+    border-color: #1e5a8e;
+}
+
+.reaction-counts {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.reaction-count {
+    background: #f5f5f5;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    color: #666;
+}
+
+/* User Profile Styles */
+.profile-header {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.profile-username {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile-rank {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.profile-stat {
+    text-align: center;
+}
+
+.profile-stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e5a8e;
+}
+
+.profile-stat-label {
+    font-size: 13px;
+    color: #888;
+}
+
+.profile-bio {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    color: #666;
+}
+
+/* Trending Badge */
+.trending-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Notification Badge */
+.notification-badge {
+    background: #f44336;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 4px;
+}
+
+/* Search Bar Enhanced */
+.search-container {
+    position: relative;
+    max-width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #1e5a8e;
+    box-shadow: 0 0 0 3px rgba(30, 90, 142, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+/* Enhanced Thread Badges */
+.thread-prefix {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+.prefix-tin-tuc {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.prefix-thao-luan {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.prefix-danh-gia {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.prefix-kien-thuc {
+    background: #e8f5e9;
+    color: #388e3c;
+}
+
+.prefix-thac-mac {
+    background: #fce4ec;
+    color: #c2185b;
+}
+
+/* Skeleton Loading for Images */
+.skeleton-avatar {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
